@@ -32,13 +32,10 @@ public class MainForm extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
 
-        Image img = new Image("image.jpg");
+        Image img = new Image("new-york.jpg");
         img.convertToGrayScale();
-        float[][] filter = {{-1, -2, -1},
-                            {0, 0, 0},
-                            {1, 2, 1}};
-        img.convolveImage(filter);
-        //img.detectEdgesCanny(1.4f, 56, 56);
+        img.detectEdgesCanny(1.4f, 25, 75);
+        //img.detectEdgesSobel();
         background = new ImagePanel(img);
         this.add(background);
         this.setSize(background.getImageWidth(), background.getImageHeight());

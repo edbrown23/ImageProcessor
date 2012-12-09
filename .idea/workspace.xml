@@ -2,20 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="369c2c90-9b68-47bc-b9c0-5515962013ca" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ImageProcessing/BoundaryPolicies.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ImageProcessing/Image.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ImageProcessing/ImagePanel.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ImageProcessing/MainForm.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/ImageProcessing/start.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ImageProcessing/Image.java" afterPath="$PROJECT_DIR$/src/ImageProcessing/Image.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ImageProcessing/MainForm.java" afterPath="$PROJECT_DIR$/src/ImageProcessing/MainForm.java" />
     </list>
     <ignored path="ImageProcessor.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/Dummy.txt" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355008049653" ignored="false" />
-    <file path="/MainForm.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355021172129" ignored="false" />
-    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355021341799" ignored="false" />
+    <file path="/MainForm.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355029493815" ignored="false" />
+    <file path="$PROJECT_DIR$/.idea/workspace.xml" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355038553013" ignored="false" />
     <file path="/main.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355009246654" ignored="false" />
     <file path="/start.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355009238660" ignored="false" />
-    <file path="/Image.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355021272089" ignored="false" />
+    <file path="/Image.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355038548715" ignored="false" />
     <file path="/BoundaryPolicies.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355012627948" ignored="false" />
     <file path="/ImagePanel.java" changelist="369c2c90-9b68-47bc-b9c0-5515962013ca" time="1355014315756" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -77,17 +74,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="MainForm.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ImageProcessing/MainForm.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="10" selection-start="1802" selection-end="1802" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ImagePanel.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ImageProcessing/ImagePanel.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -102,7 +88,7 @@
       <file leaf-file-name="Image.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ImageProcessing/Image.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="97" column="0" selection-start="3543" selection-end="3543" vertical-scroll-proportion="0.49204051">
+            <state line="162" column="24" selection-start="5882" selection-end="5882" vertical-scroll-proportion="0.8552822">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -110,11 +96,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BoundaryPolicies.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ImageProcessing/BoundaryPolicies.java">
+      <file leaf-file-name="MainForm.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ImageProcessing/MainForm.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="1" selection-start="1355" selection-end="1355" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="33" column="0" selection-start="1557" selection-end="1557" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -151,8 +139,8 @@
         <option value="$PROJECT_DIR$/src/ImageProcessing/start.java" />
         <option value="$PROJECT_DIR$/src/ImageProcessing/BoundaryPolicies.java" />
         <option value="$PROJECT_DIR$/src/ImageProcessing/ImagePanel.java" />
-        <option value="$PROJECT_DIR$/src/ImageProcessing/Image.java" />
         <option value="$PROJECT_DIR$/src/ImageProcessing/MainForm.java" />
+        <option value="$PROJECT_DIR$/src/ImageProcessing/Image.java" />
       </list>
     </option>
   </component>
@@ -383,15 +371,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34593993" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2858732" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.20244716" sideWeight="0.49839914" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -400,11 +389,10 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16061899" sideWeight="0.7975528" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20244716" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39933258" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20244716" sideWeight="0.49786553" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
@@ -482,15 +470,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ImageProcessing/MainForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="10" selection-start="1802" selection-end="1802" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageProcessing/ImagePanel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="45" column="27" selection-start="1771" selection-end="1771" vertical-scroll-proportion="0.0">
@@ -500,9 +479,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ImageProcessing/MainForm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="33" column="0" selection-start="1557" selection-end="1557" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ImageProcessing/Image.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="0" selection-start="3543" selection-end="3543" vertical-scroll-proportion="0.49204051">
+        <state line="162" column="24" selection-start="5882" selection-end="5882" vertical-scroll-proportion="0.8552822">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

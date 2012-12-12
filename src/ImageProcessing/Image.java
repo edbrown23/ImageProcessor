@@ -136,9 +136,9 @@ public class Image {
         convolveImage(kernel);
 
         // Acquire the image gradients
-        float[][] ySobel = {{-1, 0, 1},
-                {-2, 0, 2},
-                {-1, 0, 1}};
+        float[][] ySobel = {{1, 0, -1},
+                {2, 0, -2},
+                {1, 0, -1}};
         float[][] xSobel = {{-1, -2, -1},
                 {0, 0, 0},
                 {1, 2, 1}};
@@ -164,16 +164,26 @@ public class Image {
     }
 
     public void applyHysteresis(Image nonMax, int lThresh, int hThresh) {
-        boolean changed = true;
+        boolean changed = false;
+        int count = 0;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if(nonMax.getGrayScalePixel(x, y) > hThresh){
+                    image.setRGB(x, y, 0xffffffff);
+                }else if(nonMax.getGrayScalePixel(x, y) < lThresh){
+                    image.setRGB(x, y, 0xff000000);
+                }
+            }
+        }
         while (changed) {
+            count++;
+            if(count > 100){
+                break;
+            }
             changed = false;
             for (int y = 1; y < height - 1; y++) {
                 for (int x = 1; x < width - 1; x++) {
-                    if(nonMax.getGrayScalePixel(x, y) > hThresh){
-                        image.setRGB(x, y, 0xffffffff);
-                    }else if(getGrayScalePixel(x, y) < lThresh){
-                        image.setRGB(x, y, 0xff000000);
-                    }else{
+                    if(nonMax.getGrayScalePixel(x, y) > lThresh && nonMax.getGrayScalePixel(x, y) < hThresh){
                         for(int j = -1; j < 2; j++){
                             for(int i = -1; i < 2; i++){
                                 if(nonMax.getGrayScalePixel(x + i, y + j) > hThresh){
@@ -186,6 +196,7 @@ public class Image {
                 }
             }
         }
+        System.out.println(count);
     }
 
     public void calculateGradientImage(Image gX, Image gY) {

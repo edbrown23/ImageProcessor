@@ -32,9 +32,9 @@ public class MainForm extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
 
-        Image img = new Image("new-york.jpg");
+        Image img = new Image("test.png");
         img.convertToGrayScale();
-        img.detectEdgesCanny(1.4f, 25, 75);
+        img.detectEdgesCanny(1.4f, 65, 75);
         //img.detectEdgesSobel();
         background = new ImagePanel(img);
         this.add(background);

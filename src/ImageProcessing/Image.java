@@ -1,7 +1,10 @@
 package ImageProcessing;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,62 +28,44 @@ import java.io.IOException;
  * Created By: Eric Brown
  * Date: 12/8/12
  */
-public class Image {
-    private BufferedImage image;
-    private int width;
-    private int height;
+public class Image extends BufferedImage {
 
-    /**
-     * Constructs a new image which is a copy of the input image
-     *
-     * @param srcImage The image to copy
-     */
-    public Image(BufferedImage srcImage) {
-        image = srcImage;
-        this.width = srcImage.getWidth();
-        this.height = srcImage.getHeight();
+    public Image(int width, int height, int imageType) {
+        super(width, height, imageType);
     }
 
-    /**
-     * Constructs a new image which is loaded from a file
-     *
-     * @param imgFileName The filename/location from which to load the image
-     */
-    public Image(String imgFileName) {
-        try {
-            image = ImageIO.read(new File(imgFileName));
-            this.width = image.getWidth();
-            this.height = image.getHeight();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+    public Image(Image toCopy){
+        super(toCopy.getWidth(), toCopy.getHeight(), toCopy.getType());
+        for(int y = 0; y < toCopy.getHeight(); y++){
+            for(int x = 0; x < toCopy.getWidth(); x++){
+                this.setRGB(x, y, toCopy.getRGB(x, y));
+            }
         }
     }
 
-    /**
-     * Constructs an empty image of the desired type.
-     *
-     * @param width     Desired Image Width
-     * @param height    Desired Image Height
-     * @param imageType The image type. Constants can be found as static fields of the BufferedImage class
-     */
-    public Image(int width, int height, int imageType) {
-        image = new BufferedImage(width, height, imageType);
-        this.width = width;
-        this.height = height;
+    public Image(BufferedImage toCopy){
+        super(toCopy.getWidth(), toCopy.getHeight(), toCopy.getType());
+        for(int y = 0; y < toCopy.getHeight(); y++){
+            for(int x = 0; x < toCopy.getWidth(); x++){
+                this.setRGB(x, y, toCopy.getRGB(x, y));
+            }
+        }
     }
 
-    public void convertToGrayScale() {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int value = image.getRGB(x, y);
+    public static Image convertToGrayScale(Image img) {
+        Image outputImage = new Image(img.getWidth(), img.getHeight(), img.getType());
+        for (int y = 0; y < img.getHeight(); y++) {
+            for (int x = 0; x < img.getWidth(); x++) {
+                int value = img.getRGB(x, y);
                 int red = (value & 0xff0000) >> 16;
                 int green = (value & 0xff00) >> 8;
                 int blue = value & 0xff;
                 int newValue = (red + green + blue) / 3;
                 newValue = 0xff000000 | (newValue << 16 | newValue << 8 | newValue);
-                image.setRGB(x, y, newValue);
+                outputImage.setRGB(x, y, newValue);
             }
         }
+        return outputImage;
     }
 
     /**
@@ -94,33 +79,33 @@ public class Image {
      * 0  0  0
      * 1  2  1
      */
-    public void detectEdgesSobel() {
+    public static Image detectEdgesSobel(Image sourceImage) {
         float[][] ySobel = {{-1, 0, 1},
                 {-2, 0, 2},
                 {-1, 0, 1}};
         float[][] xSobel = {{-1, -2, -1},
                 {0, 0, 0},
                 {1, 2, 1}};
-        Image xCopy = new Image(this.image);
-        xCopy.convolveImage(xSobel);
-        convolveImage(ySobel);
-        addImage(xCopy);
+        Image xCopy = convolveImage(sourceImage, xSobel, BoundaryPolicies.None);
+        Image yCopy = convolveImage(sourceImage, ySobel, BoundaryPolicies.None);
+        return addImages(xCopy, yCopy);
     }
 
-    public void addImage(Image img) {
-        BufferedImage copy = img.getImage();
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int oldVal = image.getRGB(x, y) & 0xff;
-                int newVal = copy.getRGB(x, y) & 0xff;
+    public static Image addImages(Image img1, Image img2) {
+        Image output = new Image(img1.getWidth(), img1.getHeight(), img1.getType());
+        for (int y = 0; y < img1.getHeight(); y++) {
+            for (int x = 0; x < img1.getWidth(); x++) {
+                int oldVal = img1.getRGB(x, y) & 0xff;
+                int newVal = img2.getRGB(x, y) & 0xff;
                 newVal += oldVal;
                 if (newVal > 255) {
                     newVal = 255;
                 }
                 newVal = 0xff000000 | (newVal << 16 | newVal << 8 | newVal);
-                image.setRGB(x, y, newVal);
+                output.setRGB(x, y, newVal);
             }
         }
+        return output;
     }
 
     /**
@@ -130,10 +115,11 @@ public class Image {
      * @param lowThreshold  The lower threshold for the hysteresis step
      * @param highThreshold The upper threshold for the hysteresis step
      */
-    public void detectEdgesCanny(float sigma, int lowThreshold, int highThreshold) {
+    public static Image detectEdgesCanny(Image sourceImage, float sigma, int lowThreshold, int highThreshold) {
+        Image grayscale = convertToGrayScale(sourceImage);
         // smooth the image with the gaussian kernel
         float[][] kernel = generateGaussianKernel(sigma);
-        convolveImage(kernel);
+        Image smoothedImage = convolveImage(grayscale, kernel, BoundaryPolicies.None);
 
         // Acquire the image gradients
         float[][] ySobel = {{1, 0, -1},
@@ -142,36 +128,31 @@ public class Image {
         float[][] xSobel = {{-1, -2, -1},
                 {0, 0, 0},
                 {1, 2, 1}};
-        Image gX = new Image(this.image);
-        gX.convolveImage(xSobel);
-        Image gY = new Image(this.image);
-        gY.convolveImage(ySobel);
+        Image gX = convolveImage(smoothedImage, xSobel, BoundaryPolicies.None);
+        Image gY = convolveImage(smoothedImage, ySobel, BoundaryPolicies.None);
 
         // Determine image angles
-        Image angles = new Image(width, height, BufferedImage.TYPE_INT_ARGB);
-        angles.determineImageAngles(gX, gY);
+        Image angles = calculateImageAngles(gX, gY);
 
-        Image gradient = new Image(width, height, BufferedImage.TYPE_INT_ARGB);
-        gradient.calculateGradientImage(gX, gY);
+        Image gradient = calculateGradientImage(gX, gY);
 
-        Image nonMax = new Image(gradient.image);
-        nonMax.applyNonMaximalSuppression(gradient, angles);
+        Image nonMax = calculateNonMaximalSuppression(gradient, angles);
 
-        Image hyst = new Image(width, height, BufferedImage.TYPE_INT_ARGB);
-        hyst.applyHysteresis(nonMax, lowThreshold, highThreshold);
+        Image hyst = applyHysteresis(nonMax, lowThreshold, highThreshold);
 
-        image = gradient.image;
+        return hyst;
     }
 
-    public void applyHysteresis(Image nonMax, int lThresh, int hThresh) {
-        boolean changed = false;
+    public static Image applyHysteresis(Image nonMax, int lThresh, int hThresh) {
+        Image output = new Image(nonMax.getWidth(), nonMax.getHeight(), nonMax.getType());
+        boolean changed = true;
         int count = 0;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < nonMax.getHeight(); y++) {
+            for (int x = 0; x < nonMax.getWidth(); x++) {
                 if(nonMax.getGrayScalePixel(x, y) > hThresh){
-                    image.setRGB(x, y, 0xffffffff);
+                    output.setRGB(x, y, 0xffffffff);
                 }else if(nonMax.getGrayScalePixel(x, y) < lThresh){
-                    image.setRGB(x, y, 0xff000000);
+                    output.setRGB(x, y, 0xff000000);
                 }
             }
         }
@@ -181,13 +162,13 @@ public class Image {
                 break;
             }
             changed = false;
-            for (int y = 1; y < height - 1; y++) {
-                for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < output.getHeight() - 1; y++) {
+                for (int x = 1; x < output.getWidth() - 1; x++) {
                     if(nonMax.getGrayScalePixel(x, y) > lThresh && nonMax.getGrayScalePixel(x, y) < hThresh){
                         for(int j = -1; j < 2; j++){
                             for(int i = -1; i < 2; i++){
                                 if(nonMax.getGrayScalePixel(x + i, y + j) > hThresh){
-                                    image.setRGB(x, y, 0xffffffff);
+                                    output.setRGB(x, y, 0xffffffff);
                                     changed = true;
                                 }
                             }
@@ -197,25 +178,32 @@ public class Image {
             }
         }
         System.out.println(count);
+        return output;
     }
 
-    public void calculateGradientImage(Image gX, Image gY) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+    public static Image calculateGradientImage(Image gX, Image gY) {
+        Image output = new Image(gX.getWidth(), gX.getHeight(), gX.getType());
+        for (int y = 0; y < gX.getHeight(); y++) {
+            for (int x = 0; x < gX.getWidth(); x++) {
                 // somewhat inefficient euclidean distance. Could use manhattan distance for some extra speed
                 int xSquared = gX.getGrayScalePixel(x, y) * gX.getGrayScalePixel(x, y);
                 int ySquared = gY.getGrayScalePixel(x, y) * gY.getGrayScalePixel(x, y);
                 int newVal = (int) Math.round(Math.sqrt(xSquared + ySquared));
+                if(newVal > 255){
+                    newVal = 255;
+                }
                 newVal = 0xff000000 | (newVal << 16 | newVal << 8 | newVal);
-                image.setRGB(x, y, newVal);
+                output.setRGB(x, y, newVal);
             }
         }
+        return output;
     }
 
-    public void applyNonMaximalSuppression(Image gradientImage, Image angleImage) {
+    public static Image calculateNonMaximalSuppression(Image gradientImage, Image angleImage) {
+        Image output = new Image(gradientImage);
         int nonMaxCount = 0;
-        for (int y = 1; y < height - 1; y++) {
-            for (int x = 1; x < width - 1; x++) {
+        for (int y = 1; y < gradientImage.getHeight() - 1; y++) {
+            for (int x = 1; x < gradientImage.getWidth() - 1; x++) {
                 // Get the appropriate neighbor intensities, based on the current pixel's angle
                 int firstNeighbor = 0;
                 int secondNeighbor = 0;
@@ -234,54 +222,60 @@ public class Image {
                     secondNeighbor = gradientImage.getGrayScalePixel(x - 1, y + 1);
                 }
                 // If the current pixel is not a local max, remove it from the image
-                if (currentPixel <= firstNeighbor || currentPixel <= secondNeighbor) {
-                    image.setRGB(x, y, 0xff000000);
+                if (currentPixel < firstNeighbor || currentPixel < secondNeighbor) {
+                    output.setRGB(x, y, 0xff000000);
                 }
             }
         }
+        return output;
     }
 
-    public void determineImageAngles(Image gX, Image gY) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+    private static Image calculateImageAngles(Image gX, Image gY) {
+        Image output = new Image(gX.getWidth(), gX.getHeight(), gX.getType());
+        for (int y = 0; y < gX.getHeight(); y++) {
+            for (int x = 0; x < gY.getWidth(); x++) {
+                int newValue = 0;
                 float angle;
                 // To avoid divide by zeroes, we set the angle appropriately here
-                if (Math.abs(gX.getGrayScalePixel(x, y)) == 0) {
-                    if (Math.abs(gY.getGrayScalePixel(x, y)) == 0) {
-                        angle = 0;
+                if (gX.getGrayScalePixel(x, y) == 0) {
+                    if (gY.getGrayScalePixel(x, y) == 0) {
+                        newValue = 0;
                     } else {
-                        angle = 90;
+                        newValue = 90;
                     }
                 } else {
                     // We determine the angle as below, then round the angle to 0, 45, 90, or 135, depending on what's closest
-                    angle = (float) Math.toDegrees(Math.atan((float) gY.getGrayScalePixel(x, y) / (float) gX.getGrayScalePixel(x, y)));
-                    if (angle >= 67.5 || angle < -67.5) {
-                        angle = 90;
-                    } else if (angle >= -67.5 && angle < -22.5) {
-                        angle = 45;
-                    } else if (angle >= -22.5 && angle < 22.5) {
-                        angle = 0;
+                    float gradY = gY.getGrayScalePixel(x, y);
+                    float gradX = gX.getGrayScalePixel(x, y);
+                    angle = (float) Math.toDegrees(Math.atan(gradY / gradX));
+                    if (angle >= 157.5 || angle < 22.5) {
+                        newValue = 0;
                     } else if (angle >= 22.5 && angle < 67.5) {
-                        angle = 135;
+                        newValue = 135;
+                    } else if (angle >= 67.5 && angle < 112.5) {
+                        newValue = 90;
+                    } else if (angle >= 112.5 && angle < 157.5) {
+                        newValue = 45;
                     }
                 }
-                int newValue = 0xff000000 | ((int) angle << 16 | (int) angle << 8 | (int) angle);
-                image.setRGB(x, y, newValue);
+                newValue = 0xff000000 | (newValue << 16) | (newValue << 8) | newValue;
+                output.setRGB(x, y, newValue);
             }
         }
+        return output;
     }
 
     public int[][] toGrayScaleArray() {
-        int[][] values = new int[width][height];
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                values[x][y] = image.getRGB(x, y) & 0xff;
+        int[][] values = new int[getWidth()][getHeight()];
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                values[x][y] = getRGB(x, y) & 0xff;
             }
         }
         return values;
     }
 
-    public float[][] generateGaussianKernel(float sigma) {
+    public static float[][] generateGaussianKernel(float sigma) {
         float[][] gaussianKernel = new float[5][5];
 
         double sigmaSquared = sigma * sigma;
@@ -296,12 +290,12 @@ public class Image {
         return gaussianKernel;
     }
 
-    public void convolveImage(float[][] filter) {
-        convolveImage(filter, BoundaryPolicies.None);
+    public void convolveImage(Image sourceImage, float[][] filter) {
+        convolveImage(sourceImage, filter, BoundaryPolicies.None);
     }
 
-    public void convolveImage(float[][] filter, BoundaryPolicies p) {
-        BufferedImage output = new BufferedImage(width, height, image.getType());
+    public static Image convolveImage(Image sourceImage, float[][] filter, BoundaryPolicies p) {
+        Image output = new Image(sourceImage.getWidth(), sourceImage.getHeight(), sourceImage.getType());
         int filterWidth = filter[0].length;
         int filterHeight = filter.length;
         float fSum = getFilterSum(filter);
@@ -311,40 +305,38 @@ public class Image {
 
         int fW = filterWidth / 2;
         int fH = filterHeight / 2;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
+        for (int y = 0; y < sourceImage.getHeight(); y++) {
+            for (int x = 0; x < sourceImage.getWidth(); x++) {
                 float filterSum = 0;
                 for (int fY = -1 * fH; fY <= fH; fY++) {
                     for (int fX = -1 * fW; fX <= fW; fX++) {
                         int iX = x + fX;
                         int iY = y + fY;
                         int pixelValue = 0;
-                        if (iX < 0 || iX >= width || iY < 0 || iY >= height) {
+                        if (iX < 0 || iX >= sourceImage.getWidth() || iY < 0 || iY >= sourceImage.getHeight()) {
                             if (p == BoundaryPolicies.None) {
                                 break;
                             }
                         } else {
                             // We're really only supporting grayscale images right now, so we just need one color channel
-                            pixelValue = image.getRGB(iX, iY) & 0xff;
+                            pixelValue = sourceImage.getRGB(iX, iY) & 0xff;
                         }
                         filterSum += (float) pixelValue * filter[fX + fW][fY + fH];
                     }
                 }
                 // Once again, we're just doing grayscale for now
-                int filterTotal = Math.round(filterSum / fSum);
+                int filterTotal = Math.abs(Math.round(filterSum / fSum));
                 if (filterTotal > 255) {
                     filterTotal = 255;
-                } else if (filterTotal < 0) {
-                    filterTotal = 0;
                 }
                 int newPixelValue = 0xff000000 | (filterTotal << 16 | filterTotal << 8 | filterTotal);
                 output.setRGB(x, y, newPixelValue);
             }
         }
-        image = output;
+        return output;
     }
 
-    public float getFilterSum(float[][] filter) {
+    public static float getFilterSum(float[][] filter) {
         float sum = 0;
         for (int y = 0; y < filter.length; y++) {
             for (int x = 0; x < filter[0].length; x++) {
@@ -355,18 +347,6 @@ public class Image {
     }
 
     public int getGrayScalePixel(int x, int y) {
-        return image.getRGB(x, y) & 0xff;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public BufferedImage getImage() {
-        return image;
+        return getRGB(x, y) & 0xff;
     }
 }

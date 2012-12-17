@@ -1,7 +1,11 @@
 package ImageProcessing;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This software falls under the MIT license, as follows:
@@ -32,10 +36,14 @@ public class MainForm extends JFrame {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
 
-        Image img = new Image("test.png");
-        img.convertToGrayScale();
-        img.detectEdgesCanny(1.4f, 65, 75);
-        //img.detectEdgesSobel();
+        Image img = null;
+        try {
+            img = new Image(ImageIO.read(new File("test.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        img = Image.detectEdgesCanny(img, 1.4f, 25, 70);
+        //img = Image.detectEdgesSobel(img);
         background = new ImagePanel(img);
         this.add(background);
         this.setSize(background.getImageWidth(), background.getImageHeight());
